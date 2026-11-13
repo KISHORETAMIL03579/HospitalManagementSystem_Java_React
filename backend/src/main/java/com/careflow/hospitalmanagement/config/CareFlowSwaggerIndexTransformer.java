@@ -33,6 +33,13 @@ public class CareFlowSwaggerIndexTransformer extends SwaggerIndexPageTransformer
     @Override
     public Resource transform(HttpServletRequest request, Resource resource, ResourceTransformerChain transformerChain) throws IOException {
         Resource transformed = super.transform(request, resource, transformerChain);
+
+        // ONLY transform the Swagger UI HTML page, NEVER alter JavaScript or CSS webjar bundles!
+        String filename = resource.getFilename();
+        if (filename == null || !filename.endsWith(".html")) {
+            return transformed;
+        }
+
         try (InputStream is = transformed.getInputStream()) {
             String html = new String(is.readAllBytes(), StandardCharsets.UTF_8);
             String customHead = """
