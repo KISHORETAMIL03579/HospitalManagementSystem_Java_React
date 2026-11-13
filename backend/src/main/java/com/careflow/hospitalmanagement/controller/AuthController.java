@@ -42,8 +42,16 @@ public class AuthController {
 
     @PostMapping("/refresh")
     @Operation(summary = "Obtain new JWT access token using refresh token")
-    public ResponseEntity<AuthResponse> refreshToken(@RequestBody String refreshToken) {
-        AuthResponse response = authService.refreshToken(refreshToken);
+    public ResponseEntity<AuthResponse> refreshToken(@RequestBody(required = false) Map<String, Object> body) {
+        String token = "";
+        if (body != null) {
+            if (body.get("refreshToken") != null) {
+                token = body.get("refreshToken").toString();
+            } else if (body.get("token") != null) {
+                token = body.get("token").toString();
+            }
+        }
+        AuthResponse response = authService.refreshToken(token);
         return ResponseEntity.ok(response);
     }
 

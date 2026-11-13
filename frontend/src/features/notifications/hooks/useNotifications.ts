@@ -2,8 +2,6 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "../../auth/hooks/useAuth";
 import {
   NotificationItem,
-  NotificationCategory,
-  NotificationPriority,
   NotificationPreferences,
 } from "../types/notification.types";
 
@@ -25,7 +23,7 @@ const DEFAULT_PREFERENCES: NotificationPreferences = {
 
 const getInitialNotificationsForRole = (
   roleName: string,
-  userName: string,
+  _userName?: string,
 ): NotificationItem[] => {
   const role = roleName.toLowerCase().replace(/[\s_-]/g, "");
 

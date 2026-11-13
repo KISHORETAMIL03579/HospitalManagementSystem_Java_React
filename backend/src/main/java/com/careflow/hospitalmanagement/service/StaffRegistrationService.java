@@ -95,7 +95,10 @@ public class StaffRegistrationService {
         s.setUsername(username);
         s.setPasswordHash(passwordHasher.hashPassword(request.getPassword()));
         s.setEmployeeId(request.getEmployeeId() != null && !request.getEmployeeId().isBlank() ? request.getEmployeeId().trim() : null);
-        s.setDepartmentId(request.getDepartmentId());
+        if (request.getDepartmentId() != null) {
+            deptRepo.findById(request.getDepartmentId())
+                    .ifPresent(d -> s.setDepartmentId(d.getDepartmentId()));
+        }
         s.setRequestedRoleId(targetRole.getRoleId());
         s.setInvitationCode(request.getInvitationCode() != null ? request.getInvitationCode().trim() : "");
         s.setStatus(RegistrationStatus.Pending);

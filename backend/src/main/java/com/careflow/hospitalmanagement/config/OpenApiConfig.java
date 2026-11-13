@@ -60,3 +60,4 @@ public class OpenApiConfig {
                                 .description("Enter JWT Bearer token")));
     }
 }
+

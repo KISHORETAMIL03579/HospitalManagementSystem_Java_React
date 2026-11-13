@@ -1,5 +1,6 @@
 package com.careflow.hospitalmanagement.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum EmailDeliveryStatus {
@@ -7,8 +8,7 @@ public enum EmailDeliveryStatus {
     Sent(1),
     Delivered(2),
     Failed(3),
-    Bounced(4),
-    Retrying(5);
+    Bounced(4);
 
     private final int value;
 
@@ -31,6 +31,23 @@ public enum EmailDeliveryStatus {
                 return s;
             }
         }
-        return Sent;
+        return Queued;
+    }
+
+    @JsonCreator
+    public static EmailDeliveryStatus from(Object value) {
+        if (value == null) {
+            return Queued;
+        }
+        if (value instanceof Number n) {
+            return fromValue(n.intValue());
+        }
+        String str = value.toString().trim();
+        for (EmailDeliveryStatus s : values()) {
+            if (s.name().equalsIgnoreCase(str) || String.valueOf(s.value).equals(str)) {
+                return s;
+            }
+        }
+        return Queued;
     }
 }

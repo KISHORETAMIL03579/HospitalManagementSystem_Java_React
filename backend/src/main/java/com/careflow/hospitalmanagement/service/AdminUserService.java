@@ -1,11 +1,12 @@
 package com.careflow.hospitalmanagement.service;
 
+import com.careflow.hospitalmanagement.domain.entities.InvitationCode;
 import com.careflow.hospitalmanagement.domain.entities.Role;
 import com.careflow.hospitalmanagement.domain.entities.User;
 import com.careflow.hospitalmanagement.domain.enums.UserRole;
 import com.careflow.hospitalmanagement.dto.admin.*;
-import com.careflow.hospitalmanagement.dto.auth.RoleDto;
 import com.careflow.hospitalmanagement.exception.ResourceNotFoundException;
+import com.careflow.hospitalmanagement.repository.InvitationCodeRepository;
 import com.careflow.hospitalmanagement.repository.RoleRepository;
 import com.careflow.hospitalmanagement.repository.UserRepository;
 import com.careflow.hospitalmanagement.security.PasswordHasher;
@@ -26,11 +27,13 @@ public class AdminUserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final InvitationCodeRepository invitationCodeRepository;
     private final PasswordHasher passwordHasher;
 
-    public AdminUserService(UserRepository userRepository, RoleRepository roleRepository, PasswordHasher passwordHasher) {
+    public AdminUserService(UserRepository userRepository, RoleRepository roleRepository, InvitationCodeRepository invitationCodeRepository, PasswordHasher passwordHasher) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.invitationCodeRepository = invitationCodeRepository;
         this.passwordHasher = passwordHasher;
     }
 
@@ -212,5 +215,59 @@ public class AdminUserService {
             throw new IllegalArgumentException("Phone number must contain between 7 and 15 digits in valid international E.164 format (e.g. +919876543210).");
         }
         return trimmed.startsWith("+") ? ("+" + digits) : (digits.length() > 10 ? ("+" + digits) : trimmed);
+    }
+
+    @Transactional(readOnly = true)
+    public List<InvitationCodeDto> getAllInvitationCodes() {
+        return invitationCodeRepository.findAllWithRole().stream()
+                .map(this::mapToInvitationCodeDto)
+                .toList();
+    }
+
+    public InvitationCodeDto createInvitationCode(CreateInvitationCodeRequest request) {
+        Role targetRole = roleRepository.findById(request.getTargetRoleId())
+                .orElseThrow(() -> new IllegalArgumentException("Target role not found with ID: " + request.getTargetRoleId()));
+
+        String code = request.getCode();
+        if (code == null || code.isBlank()) {
+            code = targetRole.getName().toUpperCase() + "-" + java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        } else {
+            code = code.trim().toUpperCase();
+            if (invitationCodeRepository.existsByCode(code)) {
+                throw new IllegalArgumentException("Invitation code '" + code + "' already exists.");
+            }
+        }
+
+        InvitationCode inv = new InvitationCode();
+        inv.setCode(code);
+        inv.setCodeHash(passwordHasher.hashPassword(code));
+        inv.setTargetRoleId(targetRole.getRoleId());
+        inv.setTargetRole(targetRole);
+        inv.setBoundEmail(request.getBoundEmail() != null && !request.getBoundEmail().isBlank() ? request.getBoundEmail().trim().toLowerCase() : null);
+        inv.setBoundEmployeeId(request.getBoundEmployeeId() != null && !request.getBoundEmployeeId().isBlank() ? request.getBoundEmployeeId().trim() : null);
+        inv.setBoundHospitalId(request.getBoundHospitalId() != null && !request.getBoundHospitalId().isBlank() ? request.getBoundHospitalId().trim() : null);
+        inv.setExpiresAt(LocalDateTime.now().plusDays(request.getExpiresInDays()));
+        inv.setUsed(false);
+
+        InvitationCode saved = invitationCodeRepository.save(inv);
+        log.info("SECURITY AUDIT: Admin created invitation code '{}' for role '{}'", code, targetRole.getName());
+        return mapToInvitationCodeDto(saved);
+    }
+
+    private InvitationCodeDto mapToInvitationCodeDto(InvitationCode inv) {
+        InvitationCodeDto dto = new InvitationCodeDto();
+        dto.setInvitationCodeId(inv.getInvitationCodeId());
+        dto.setCode(inv.getCode());
+        dto.setTargetRoleId(inv.getTargetRoleId());
+        dto.setTargetRoleName(inv.getTargetRole() != null ? inv.getTargetRole().getName() : "");
+        dto.setBoundHospitalId(inv.getBoundHospitalId());
+        dto.setBoundEmail(inv.getBoundEmail());
+        dto.setBoundEmployeeId(inv.getBoundEmployeeId());
+        dto.setUsed(inv.isUsed());
+        dto.setUsedAt(inv.getUsedAt());
+        dto.setUsedByUserId(inv.getUsedByUserId());
+        dto.setExpiresAt(inv.getExpiresAt());
+        dto.setCreatedAt(inv.getCreatedAt());
+        return dto;
     }
 }

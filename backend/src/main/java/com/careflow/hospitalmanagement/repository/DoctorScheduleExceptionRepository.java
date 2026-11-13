@@ -4,12 +4,10 @@ import com.careflow.hospitalmanagement.domain.entities.DoctorScheduleException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Repository
 public interface DoctorScheduleExceptionRepository extends JpaRepository<DoctorScheduleException, Integer> {
 
     @Query("SELECT e FROM DoctorScheduleException e WHERE e.doctorId = :doctorId AND e.isActive = true AND " +

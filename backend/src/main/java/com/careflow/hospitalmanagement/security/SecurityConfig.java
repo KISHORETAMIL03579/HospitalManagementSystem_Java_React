@@ -2,7 +2,6 @@ package com.careflow.hospitalmanagement.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -34,10 +33,9 @@ public class SecurityConfig {
         http
             .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable())
-            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Static resources & Swagger & H2 Console
+                // Static resources & Swagger
                 .requestMatchers(
                     "/",
                     "/swagger",
@@ -45,7 +43,6 @@ public class SecurityConfig {
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
                     "/swagger-ui.html",
-                    "/h2-console/**",
                     "/error",
                     "/favicon.ico"
                 ).permitAll()
@@ -75,3 +72,4 @@ public class SecurityConfig {
         return http.build();
     }
 }
+

@@ -167,6 +167,11 @@ public class AuthService {
         return new AuthResponse(token, savedUser.getRefreshToken(), LocalDateTime.now().plusMinutes(120), mapToUserDto(savedUser));
     }
 
+    public AuthResponse refreshToken(RefreshTokenRequest request) {
+        String tokenStr = request != null && request.getRefreshToken() != null ? request.getRefreshToken() : "";
+        return refreshToken(tokenStr);
+    }
+
     public AuthResponse refreshToken(String refreshToken) {
         String cleanToken = refreshToken != null ? refreshToken.replace("\"", "").trim() : "";
         User user = userRepository.findAll().stream()
@@ -193,24 +198,34 @@ public class AuthService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
 
-        if (request.getFullName() != null && !request.getFullName().isBlank()) {
-            user.setFullName(request.getFullName().trim());
-        }
+        if (request != null) {
+            if (request.getFullName() != null && !request.getFullName().isBlank()) {
+                user.setFullName(request.getFullName().trim());
+            }
 
-        if (request.getEmail() != null && !request.getEmail().isBlank()) {
-            String newEmail = request.getEmail().trim().toLowerCase();
-            if (!newEmail.equalsIgnoreCase(user.getEmail())) {
-                if (userRepository.existsByEmailIgnoreCase(newEmail)) {
-                    throw new IllegalArgumentException("Email '" + request.getEmail() + "' is already in use.");
+            if (request.getEmail() != null && !request.getEmail().isBlank()) {
+                String newEmail = request.getEmail().trim().toLowerCase();
+                if (!newEmail.equalsIgnoreCase(user.getEmail())) {
+                    if (userRepository.existsByEmailIgnoreCase(newEmail)) {
+                        throw new IllegalArgumentException("Email '" + request.getEmail() + "' is already in use.");
+                    }
+                    user.setEmail(newEmail);
                 }
-                user.setEmail(newEmail);
+            }
+
+            if (request.getPhone() != null) {
+                user.setPhone(request.getPhone());
+            }
+            if (request.getTimeFormat() != null) {
+                user.setTimeFormat(request.getTimeFormat());
+            }
+            if (request.getTimeZone() != null) {
+                user.setTimeZone(request.getTimeZone());
+            }
+            if (request.getLanguage() != null) {
+                user.setLanguage(request.getLanguage());
             }
         }
-
-        user.setPhone(request.getPhone());
-        user.setTimeFormat(request.getTimeFormat());
-        if (request.getTimeZone() != null) user.setTimeZone(request.getTimeZone());
-        if (request.getLanguage() != null) user.setLanguage(request.getLanguage());
 
         userRepository.save(user);
         return mapToUserDto(user);
@@ -321,3 +336,4 @@ public class AuthService {
         return dto;
     }
 }
+

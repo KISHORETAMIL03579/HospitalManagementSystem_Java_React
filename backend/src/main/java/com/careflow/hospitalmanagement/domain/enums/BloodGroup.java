@@ -1,5 +1,6 @@
 package com.careflow.hospitalmanagement.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum BloodGroup {
@@ -31,6 +32,23 @@ public enum BloodGroup {
     public static BloodGroup fromValue(int value) {
         for (BloodGroup bg : values()) {
             if (bg.value == value) {
+                return bg;
+            }
+        }
+        return Unknown;
+    }
+
+    @JsonCreator
+    public static BloodGroup from(Object value) {
+        if (value == null) {
+            return Unknown;
+        }
+        if (value instanceof Number n) {
+            return fromValue(n.intValue());
+        }
+        String str = value.toString().trim();
+        for (BloodGroup bg : values()) {
+            if (bg.name().equalsIgnoreCase(str) || String.valueOf(bg.value).equals(str)) {
                 return bg;
             }
         }

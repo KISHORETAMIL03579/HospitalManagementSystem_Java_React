@@ -15,8 +15,7 @@ spring:
       ddl-auto: update
     show-sql: false
     properties:
-      hibernate:
-        format_sql: false
+      "[hibernate.format_sql]": false
   h2:
     console:
       enabled: true
@@ -25,11 +24,8 @@ spring:
     host: localhost
     port: 1025
     properties:
-      mail:
-        smtp:
-          auth: false
-          starttls:
-            enable: false
+      "[mail.smtp.auth]": false
+      "[mail.smtp.starttls.enable]": false
 
 springdoc:
   api-docs:

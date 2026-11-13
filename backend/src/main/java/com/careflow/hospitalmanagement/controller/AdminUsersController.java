@@ -37,6 +37,20 @@ public class AdminUsersController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/invitation-codes")
+    @Operation(summary = "Retrieve all staff invitation codes for administration")
+    public ResponseEntity<List<InvitationCodeDto>> getInvitationCodes() {
+        List<InvitationCodeDto> codes = adminUserService.getAllInvitationCodes();
+        return ResponseEntity.ok(codes);
+    }
+
+    @PostMapping("/invitation-codes")
+    @Operation(summary = "Generate a new staff invitation code")
+    public ResponseEntity<InvitationCodeDto> createInvitationCode(@Valid @RequestBody CreateInvitationCodeRequest request) {
+        InvitationCodeDto created = adminUserService.createInvitationCode(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
     @PostMapping
     @Operation(summary = "Admin directly creates a new user account")
     public ResponseEntity<?> createUser(

@@ -4,8 +4,6 @@ import {
   Bell,
   CheckCheck,
   ArrowRight,
-  Clock,
-  AlertTriangle,
   UserCheck,
   Calendar,
   Users,

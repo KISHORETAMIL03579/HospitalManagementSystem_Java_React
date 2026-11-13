@@ -30,6 +30,9 @@ class AdminUserServiceTest {
     @Mock
     private RoleRepository roleRepository;
 
+    @Mock
+    private com.careflow.hospitalmanagement.repository.InvitationCodeRepository invitationCodeRepository;
+
     @Spy
     private PasswordHasher passwordHasher = new PasswordHasher();
 

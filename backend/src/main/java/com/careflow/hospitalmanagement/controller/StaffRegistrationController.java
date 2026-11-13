@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/v1")
 @Tag(name = "Staff Registration", description = "Staff Self-Service Onboarding and Administrative Review Endpoints")
 public class StaffRegistrationController {
 
@@ -26,7 +27,7 @@ public class StaffRegistrationController {
         this.staffRegistrationService = staffRegistrationService;
     }
 
-    @PostMapping("/api/v1/staff-registration/requests")
+    @PostMapping("/staff-registration/requests")
     @Operation(summary = "Submit staff onboarding registration request for administrative review")
     public ResponseEntity<StaffRegistrationRequestDto> submitStaffRegistrationRequest(
             @Valid @RequestBody SubmitStaffRegistrationRequest request) {
@@ -34,7 +35,7 @@ public class StaffRegistrationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    @GetMapping("/api/v1/staff-registration/requests/{id}/status")
+    @GetMapping("/staff-registration/requests/{id}/status")
     @Operation(summary = "Check registration status by request ID")
     public ResponseEntity<?> getRegistrationStatusById(@PathVariable int id) {
         StaffRegistrationRequestDto status = staffRegistrationService.getStaffRegistrationRequestById(id);
@@ -45,7 +46,7 @@ public class StaffRegistrationController {
         return ResponseEntity.ok(status);
     }
 
-    @GetMapping("/api/v1/staff-registration/status")
+    @GetMapping("/staff-registration/status")
     @Operation(summary = "Check registration status for a staff onboarding request by email")
     public ResponseEntity<?> getRegistrationStatus(@RequestParam String email) {
         StaffRegistrationRequestDto status = staffRegistrationService.getStaffRegistrationStatus(email);
@@ -56,7 +57,7 @@ public class StaffRegistrationController {
         return ResponseEntity.ok(status);
     }
 
-    @GetMapping("/api/v1/admin/staff-registration/requests")
+    @GetMapping("/admin/staff-registration/requests")
     @PreAuthorize("hasAnyRole('Admin', 'HospitalManager')")
     @Operation(summary = "List staff registration requests for administrative review")
     public ResponseEntity<List<StaffRegistrationRequestDto>> getStaffRequests(
@@ -66,7 +67,7 @@ public class StaffRegistrationController {
         return ResponseEntity.ok(requests);
     }
 
-    @GetMapping("/api/v1/admin/staff-registration/requests/{id}")
+    @GetMapping("/admin/staff-registration/requests/{id}")
     @PreAuthorize("hasAnyRole('Admin', 'HospitalManager')")
     @Operation(summary = "Retrieve single staff registration request details for admin review")
     public ResponseEntity<?> getStaffRequestById(@PathVariable int id) {
@@ -78,7 +79,7 @@ public class StaffRegistrationController {
         return ResponseEntity.ok(request);
     }
 
-    @PostMapping("/api/v1/admin/staff-registration/requests/{id}/approve")
+    @PostMapping("/admin/staff-registration/requests/{id}/approve")
     @PreAuthorize("hasAnyRole('Admin', 'HospitalManager')")
     @Operation(summary = "Approve a staff registration request and provision user account")
     public ResponseEntity<?> approveStaffRequest(
@@ -107,7 +108,7 @@ public class StaffRegistrationController {
         return ResponseEntity.ok(approved);
     }
 
-    @PostMapping("/api/v1/admin/staff-registration/requests/{id}/reject")
+    @PostMapping("/admin/staff-registration/requests/{id}/reject")
     @PreAuthorize("hasAnyRole('Admin', 'HospitalManager')")
     @Operation(summary = "Reject a staff registration request")
     public ResponseEntity<?> rejectStaffRequest(
@@ -122,7 +123,7 @@ public class StaffRegistrationController {
         return ResponseEntity.ok(rejected);
     }
 
-    @PutMapping("/api/v1/admin/staff-registration/requests/{id}")
+    @PutMapping("/admin/staff-registration/requests/{id}")
     @PreAuthorize("hasAnyRole('Admin', 'HospitalManager')")
     @Operation(summary = "Update details and/or stage of a staff registration request")
     public ResponseEntity<?> updateStaffRequest(
@@ -143,7 +144,7 @@ public class StaffRegistrationController {
         return ResponseEntity.ok(updated);
     }
 
-    @PostMapping("/api/v1/admin/staff-registration/requests/{id}/retry-email")
+    @PostMapping("/admin/staff-registration/requests/{id}/retry-email")
     @PreAuthorize("hasAnyRole('Admin', 'HospitalManager')")
     @Operation(summary = "Retry sending notification email for a staff registration request")
     public ResponseEntity<StaffRegistrationRequestDto> retryStaffNotificationEmail(@PathVariable int id) {

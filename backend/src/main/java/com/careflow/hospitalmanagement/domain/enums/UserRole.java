@@ -1,5 +1,6 @@
 package com.careflow.hospitalmanagement.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum UserRole {
@@ -40,6 +41,23 @@ public enum UserRole {
         for (UserRole role : values()) {
             if (role.name().equalsIgnoreCase(name)) {
                 return role;
+            }
+        }
+        return Receptionist;
+    }
+
+    @JsonCreator
+    public static UserRole from(Object value) {
+        if (value == null) {
+            return Receptionist;
+        }
+        if (value instanceof Number n) {
+            return fromLevel(n.intValue());
+        }
+        String str = value.toString().trim();
+        for (UserRole r : values()) {
+            if (r.name().equalsIgnoreCase(str) || String.valueOf(r.level).equals(str)) {
+                return r;
             }
         }
         return Receptionist;

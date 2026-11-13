@@ -1,9 +1,8 @@
 import React, { useState, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Bell,
   CheckCheck,
-  Filter,
   Search,
   AlertTriangle,
   Clock,
@@ -19,19 +18,14 @@ import {
   Archive,
   RotateCcw,
   Trash2,
-  MoreVertical,
   Check,
   SlidersHorizontal,
   X,
-  ExternalLink,
-  Shield,
-  HelpCircle,
 } from "lucide-react";
 import { useNotifications } from "../hooks/useNotifications";
 import {
   NotificationCategory,
   NotificationPriority,
-  NotificationItem,
 } from "../types/notification.types";
 
 const CATEGORY_ICONS: Record<NotificationCategory, React.ElementType> = {
@@ -115,7 +109,6 @@ export const NotificationPage: React.FC = () => {
     archiveNotification,
     unarchiveNotification,
     deleteNotification,
-    clearAllRead,
     updatePreferences,
   } = useNotifications();
 
@@ -132,7 +125,6 @@ export const NotificationPage: React.FC = () => {
   const [customEndDate, setCustomEndDate] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [isPrefsModalOpen, setIsPrefsModalOpen] = useState(false);
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   // Compute items to display
   const targetList = activeTab === "archived" ? archivedList : activeList;

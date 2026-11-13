@@ -7,7 +7,6 @@ import {
   Clock,
   Building2,
   ArrowLeft,
-  ShieldAlert,
   Stethoscope,
 } from "lucide-react";
 

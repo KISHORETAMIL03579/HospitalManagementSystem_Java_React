@@ -59,7 +59,7 @@ public class AppointmentsController {
         return ResponseEntity.ok(myAppointments);
     }
 
-    @GetMapping("/my-appointments")
+    @GetMapping({"/my", "/my-appointments"})
     @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Get appointments scoped to the authenticated patient/user")
     public ResponseEntity<List<AppointmentDto>> getMyAppointments(@AuthenticationPrincipal UserPrincipal principal) {

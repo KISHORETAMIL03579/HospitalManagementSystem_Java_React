@@ -2,21 +2,18 @@ package com.careflow.hospitalmanagement.dto.auth;
 
 import com.careflow.hospitalmanagement.common.TimeFormat;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 
 public class UpdateProfileRequest {
 
-    @NotBlank(message = "Full name is required.")
-    private String fullName = "";
+    private String fullName;
 
-    @NotBlank(message = "Email is required.")
     @Email(message = "Invalid email format.")
-    private String email = "";
+    private String email;
 
     private String phone;
-    private TimeFormat timeFormat = TimeFormat.Hour12;
-    private String timeZone = "UTC";
-    private String language = "en-US";
+    private TimeFormat timeFormat;
+    private String timeZone;
+    private String language;
 
     public String getFullName() {
         return fullName;

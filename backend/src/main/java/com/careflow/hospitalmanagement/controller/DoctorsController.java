@@ -109,7 +109,7 @@ public class DoctorsController {
         return ResponseEntity.ok(exceptions);
     }
 
-    @PostMapping("/{id}/schedule-exceptions/check-conflicts")
+    @PostMapping({"/{id}/schedule-exceptions/check-conflicts", "/{id}/check-conflicts"})
     @Operation(summary = "Check for conflicts between proposed schedule exception and existing patient appointments")
     public ResponseEntity<ConflictCheckResultDto> checkConflicts(
             @PathVariable int id,

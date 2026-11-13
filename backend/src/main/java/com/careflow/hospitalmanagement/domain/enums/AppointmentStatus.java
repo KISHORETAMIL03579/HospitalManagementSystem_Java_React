@@ -1,5 +1,6 @@
 package com.careflow.hospitalmanagement.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum AppointmentStatus {
@@ -29,6 +30,23 @@ public enum AppointmentStatus {
     public static AppointmentStatus fromValue(int value) {
         for (AppointmentStatus s : values()) {
             if (s.value == value) {
+                return s;
+            }
+        }
+        return Confirmed;
+    }
+
+    @JsonCreator
+    public static AppointmentStatus from(Object value) {
+        if (value == null) {
+            return Confirmed;
+        }
+        if (value instanceof Number n) {
+            return fromValue(n.intValue());
+        }
+        String str = value.toString().trim();
+        for (AppointmentStatus s : values()) {
+            if (s.name().equalsIgnoreCase(str) || String.valueOf(s.value).equals(str)) {
                 return s;
             }
         }
