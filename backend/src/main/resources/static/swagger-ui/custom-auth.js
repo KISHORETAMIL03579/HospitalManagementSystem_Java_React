@@ -7,6 +7,34 @@
   // In-memory token storage (never localStorage for production security)
   window.__swaggerJwt = null;
 
+  // Intercept fetch calls to automatically append Authorization header if token exists
+  const originalFetch = window.fetch;
+  window.fetch = async function (resource, config = {}) {
+    if (window.__swaggerJwt) {
+      config = config || {};
+      const url = typeof resource === "string" ? resource : resource?.url;
+      if (url && (url.includes("/api/v1/") || url.startsWith("/api/v1/"))) {
+        if (!config.headers) {
+          config.headers = {};
+        }
+        if (config.headers instanceof Headers) {
+          if (!config.headers.has("Authorization")) {
+            config.headers.set("Authorization", "Bearer " + window.__swaggerJwt);
+          }
+        } else if (Array.isArray(config.headers)) {
+          if (!config.headers.some(([k]) => k.toLowerCase() === "authorization")) {
+            config.headers.push(["Authorization", "Bearer " + window.__swaggerJwt]);
+          }
+        } else {
+          if (!config.headers["Authorization"] && !config.headers["authorization"]) {
+            config.headers["Authorization"] = "Bearer " + window.__swaggerJwt;
+          }
+        }
+      }
+    }
+    return originalFetch.call(this, resource, config);
+  };
+
   const $ = (selector, root = document) => root.querySelector(selector);
 
   function createModal() {
@@ -37,8 +65,15 @@
           <section class="custom-auth-card">
             <h3>🔑 Option 1: Quick Staff Login</h3>
             <p class="custom-auth-muted">
-              Enter hospital credentials to automatically fetch and authorize a JWT Bearer token.
+              Enter hospital credentials or click a preset account to automatically fetch and authorize JWT in Swagger.
             </p>
+
+            <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap;">
+              <span style="font-size:12px;font-weight:600;color:#64748b;">Quick Select:</span>
+              <button type="button" class="preset-btn" data-user="admin" data-pass="Admin@123" style="cursor:pointer;padding:4px 10px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:4px;font-size:12px;font-weight:600;color:#1e293b;">👑 Admin</button>
+              <button type="button" class="preset-btn" data-user="doctor.smith" data-pass="Doctor@123" style="cursor:pointer;padding:4px 10px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:4px;font-size:12px;font-weight:600;color:#1e293b;">🩺 Doctor</button>
+              <button type="button" class="preset-btn" data-user="patient.doe" data-pass="Patient@123" style="cursor:pointer;padding:4px 10px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:4px;font-size:12px;font-weight:600;color:#1e293b;">🧑 Patient</button>
+            </div>
 
             <form id="staff-login-form">
               <div class="custom-auth-grid">
@@ -124,6 +159,14 @@
 
     overlay.querySelectorAll(".custom-auth-close").forEach((button) => {
       button.addEventListener("click", closeModal);
+    });
+
+    overlay.querySelectorAll(".preset-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        $("#staff-username").value = btn.dataset.user;
+        $("#staff-password").value = btn.dataset.pass;
+        $("#staff-login-submit").click();
+      });
     });
 
     $("#staff-login-form").addEventListener("submit", loginStaff);

@@ -2,6 +2,7 @@ package com.careflow.hospitalmanagement.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -26,5 +27,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addRedirectViewController("/swagger/index.html", "/swagger-ui/index.html");
         registry.addRedirectViewController("/swagger-ui", "/swagger-ui/index.html");
         registry.addRedirectViewController("/swagger-ui.html", "/swagger-ui/index.html");
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/custom-swagger/**")
+                .addResourceLocations("classpath:/static/swagger-ui/");
     }
 }
