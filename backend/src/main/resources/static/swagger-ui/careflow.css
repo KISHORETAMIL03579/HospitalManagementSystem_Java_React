@@ -60,6 +60,7 @@ body {
 .swagger-ui .topbar .topbar-wrapper {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
   width: 100%;
 }
@@ -70,36 +71,19 @@ body {
   gap: 12px;
   text-decoration: none;
   color: #fff;
+  flex-shrink: 0;
 }
 
-.swagger-ui .topbar .topbar-wrapper a.link svg {
+.swagger-ui .topbar .topbar-wrapper a.link svg,
+.swagger-ui .topbar .topbar-wrapper a.link img {
   display: none !important;
 }
 
-/* Custom Brand Emblem */
-.swagger-ui .topbar .topbar-wrapper a.link::before {
-  content: "CareFlow";
-  display: inline-flex;
-  align-items: center;
-  font-weight: 800;
-  font-size: 21px;
-  letter-spacing: -0.5px;
-  color: #ffffff;
-}
-
+/* Eliminate duplicate pseudo-elements since brand is rendered by JS */
+.swagger-ui .topbar .topbar-wrapper a.link::before,
 .swagger-ui .topbar .topbar-wrapper a.link::after {
-  content: "HMS Developer Portal";
-  display: inline-block;
-  background: rgba(37, 99, 235, 0.25);
-  border: 1px solid rgba(147, 197, 253, 0.35);
-  color: #93c5fd;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 9999px;
-  margin-left: 4px;
+  content: none !important;
+  display: none !important;
 }
 
 .swagger-ui .topbar .download-url-wrapper {
@@ -107,9 +91,11 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 0 1 420px;
 }
 
 .swagger-ui .topbar .download-url-wrapper input {
+  width: 100%;
   border-radius: var(--cf-radius-sm);
   border: 1px solid #3b82f6;
   background: rgba(255, 255, 255, 0.1);
@@ -117,10 +103,19 @@ body {
   min-height: 36px;
   padding: 6px 12px;
   font-size: 13px;
+  box-sizing: border-box;
 }
 
 .swagger-ui .topbar .download-url-wrapper input::placeholder {
   color: #94a3b8;
+}
+
+.swagger-ui .topbar .download-url-wrapper .download-url-button {
+  flex-shrink: 0;
+}
+
+.custom-auth-open {
+  flex-shrink: 0;
 }
 
 /* ==========================================================================
