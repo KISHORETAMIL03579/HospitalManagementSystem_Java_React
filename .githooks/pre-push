@@ -18,7 +18,7 @@ if [ -z "$CHANGED_FILES" ]; then
 fi
 
 FRONTEND_CHANGED=$(echo "$CHANGED_FILES" | grep -E '^frontend/')
-BACKEND_CHANGED=$(echo "$CHANGED_FILES" | grep -E '^(backend/|.*\.slnx?|.*\.cs$)')
+BACKEND_CHANGED=$(echo "$CHANGED_FILES" | grep -E '^backend/')
 
 # --- FRONTEND CHECKS ---
 if [ -n "$FRONTEND_CHANGED" ]; then
@@ -55,21 +55,15 @@ fi
 
 # --- BACKEND CHECKS ---
 if [ -n "$BACKEND_CHANGED" ]; then
-    echo "\n[Backend] Backend changes detected. Running backend quality suite..."
-
-    echo "\n -> [1/2] Checking C# code formatting..."
-    dotnet format backend/HospitalManagement.Application/HospitalManagement.Application.csproj --verify-no-changes --no-restore
-    dotnet format backend/HospitalManagement.Infrastructure/HospitalManagement.Infrastructure.csproj --verify-no-changes --no-restore
-    if [ $? -ne 0 ]; then
-        echo "\n❌ Push blocked: Backend C# formatting check failed. Run 'dotnet format'."
-        exit 1
-    fi
-
-    echo "\n -> [2/2] Running Backend unit tests..."
-    dotnet test backend/HospitalManagement.Tests/HospitalManagement.Tests.csproj --no-build
-    if [ $? -ne 0 ]; then
-        echo "\n❌ Push blocked: Backend unit tests failed."
-        exit 1
+    echo "\n[Backend] Backend changes detected. Running Java Spring Boot test suite..."
+    if [ -d "backend" ]; then
+        cd backend
+        ./mvnw test
+        if [ $? -ne 0 ]; then
+            echo "\n❌ Push blocked: Java backend unit tests failed."
+            exit 1
+        fi
+        cd ..
     fi
 else
     echo "\n[Backend] No backend files modified. Skipping backend checks."
