@@ -37,3 +37,13 @@ frontend/build/
 appsettings.Development.json
 appsettings.Local.json
 
+# Java & Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+!**/src/main/**
+!**/src/test/**
+
+

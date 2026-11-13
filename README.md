@@ -1,11 +1,11 @@
 # CareFlow Hospital Management System (HMS)
 
-> A modern, production-grade **Hospital Management System** built with **ASP.NET Core 10**, **SQL Server**, **Entity Framework Core**, and **React 19 + TypeScript (Vite)** adhering to **Clean Architecture** and **Feature-Sliced Frontend Design**.
+> A modern, enterprise-grade **Hospital Management System** built with **Java Spring Boot 3**, **Spring Security**, **Spring Data JPA**, **H2 / SQL Server**, and **React 19 + TypeScript (Vite)** adhering to **Clean Architecture** and **Feature-Sliced Frontend Design**.
 
-[![.NET 10 Build & Test](https://github.com/KISHORETAMIL03579/HospitalManagementSystem/actions/workflows/dotnet.yml/badge.svg)](https://github.com/KISHORETAMIL03579/HospitalManagementSystem)
+[![Java Spring Boot 3 Build & Test](https://img.shields.io/badge/Java-21%20%7C%20Spring%20Boot%203.3-green?logo=springboot)](https://github.com/KISHORETAMIL03579/HospitalManagementSystem_Java_React)
 ![React 19](https://img.shields.io/badge/React-19.0-blue?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?logo=typescript)
-![SQL Server](https://img.shields.io/badge/SQL_Server-2022-red?logo=microsoftsqlserver)
+![Database](https://img.shields.io/badge/Database-H2%20%7C%20SQL%20Server-red)
 
 ---
 
@@ -16,170 +16,120 @@
                        │          React + TS (Vite)            │
                        │ TanStack Query │ React Hook Form │ Zod│
                        └───────────────────┬───────────────────┘
-                                           │ HTTPS / JSON (/api/v1)
+                                           │ HTTP / JSON (/api/v1)
                                            ▼
                        ┌───────────────────────────────────────┐
-                       │         ASP.NET Core Web API          │
-                       │    Controllers / Serilog / Cors       │
+                       │        Spring Boot REST Controllers   │
+                       │   Spring Security JWT / CORS / Actuator│
                        └───────────────────┬───────────────────┘
                                            │
                                            ▼
                        ┌───────────────────────────────────────┐
-                       │   HospitalManagement.Application      │
-                       │  Use Cases / DTOs / Validators        │
+                       │             Service Layer             │
+                       │  Business Logic / DTO Mappings / Auth │
                        └───────────────────┬───────────────────┘
                                            │
                                            ▼
                        ┌───────────────────────────────────────┐
-                       │      HospitalManagement.Domain        │
+                       │             Domain Model              │
                        │ Entities / Business Rules / Enums     │
                        └───────────────────┬───────────────────┘
                                            ▲
                                            │
                        ┌───────────────────┴───────────────────┐
-                       │   HospitalManagement.Infrastructure   │
-                       │     EF Core / SQL Server Repository   │
+                       │     Spring Data JPA Repositories      │
+                       │  Hibernate ORM / JPQL / Specifications│
                        └───────────────────┬───────────────────┘
                                            │
                                            ▼
-                                   ┌───────────────┐
-                                   │  SQL Server   │
-                                   └───────────────┘
+                               ┌───────────────────────┐
+                               │  H2 (Dev) / SQL Server│
+                               └───────────────────────┘
 ```
 
 ---
 
-## 🚀 Key Features (Milestone 1 — Patient Vertical Slice)
+## 🚀 Key Features
 
-- **Patient Registration**: Demographics, contact info, date of birth, gender selection, and emergency contacts.
-- **Automated MRN Generation**: Formatted unique Medical Record Numbers (e.g. `MRN-2026-00001`).
-- **Patient Directory & Search**: Real-time filtering by Name, Phone, or MRN with paginated table view.
-- **Dual Validation Layer**: Client-side form validation via **Zod** + Server-side validation via **FluentValidation**.
-- **Server State Caching**: **TanStack Query (v5)** automatic query invalidation and optimistic updates.
-- **Structured Logging**: Integrated **Serilog** for application event tracking.
-
----
-
-## 🛠️ Technology Stack
-
-| Layer | Technology / Libraries |
-| :--- | :--- |
-| **Frontend Framework** | React 19 + TypeScript 5.8 + Vite |
-| **UI & Styling** | Tailwind CSS v4 + Lucide Icons |
-| **State & Data Fetching** | TanStack Query v5 + Axios |
-| **Forms & Validation** | React Hook Form + Zod |
-| **Backend Framework** | ASP.NET Core 10 Web API |
-| **ORM & Database** | Entity Framework Core 10 + SQL Server |
-| **Backend Validation** | FluentValidation |
-| **Testing** | xUnit + Moq |
+- **Dynamic RBAC & Role Hierarchy**: 8 dynamic roles (`Admin`, `HospitalManager`, `Doctor`, `Nurse`, `Receptionist`, `Pharmacist`, `LabTechnician`, `Patient`) with granular permissions and numeric hierarchy levels.
+- **Enterprise Security**: PBKDF2 HMAC-SHA256 password hashing (100,000 iterations), stateless JWT Bearer token authentication, refresh token rotation, and Spring Security method authorization (`@PreAuthorize`).
+- **Staff Onboarding & Invitation Workflows**: Secure invitation codes with role/email bindings, self-service applicant registration requests, and administrative approval workflows with automated HTML email notifications.
+- **Patient Management & Automated MRN Generation**: Formatted unique Medical Record Numbers (e.g. `MRN-2026-00001`), demographics, medical history, emergency contacts, and paginated search.
+- **Doctor Directory, Schedules & Exceptions**: Clinical availability engine evaluating recurring weekly hours, leave exceptions, slot bookings, and real-time conflict checking.
+- **Appointment Scheduling**: Multi-state lifecycle workflow (`Pending`, `Confirmed`, `CheckedIn`, `InConsultation`, `Completed`, `Cancelled`, `NoShow`) with conflict prevention.
+- **Interactive OpenAPI / Swagger UI**: Built-in developer portal with custom CareFlow branding and header JWT authentication at `http://localhost:5000/swagger`.
+- **Zero-Config Developer Experience**: Embedded H2 database with automatic schema generation and seed data (`DbInitializer`) ready on first launch; seamless optional switch to Microsoft SQL Server via Spring profiles.
 
 ---
 
-## 📁 Repository Structure
+## 📋 Default Credentials (Auto-Seeded)
 
-```
-HospitalManagement.slnx
-│
-├── HospitalManagement.Api/             # Web API Controllers, Cors, Serilog
-├── HospitalManagement.Application/     # Application Services, DTOs, Validators
-├── HospitalManagement.Domain/          # Core Domain Entities & Business Rules
-├── HospitalManagement.Infrastructure/   # DbContext, EF Core Configurations & Repositories
-├── HospitalManagement.Tests/           # xUnit Unit & Integration Tests
-│
-└── frontend/                           # React + TypeScript Vite Application
-    └── src/
-        ├── app/                        # Router, QueryClient, Providers
-        ├── components/                 # Shared UIPrimitives & Layout Shell
-        ├── features/                   # Feature-sliced domain modules (patients, auth, etc.)
-        └── lib/                        # Axios client & formatters
-```
+| Role | Username / Email | Password | Access Scope |
+|------|-----------------|----------|--------------|
+| **Admin** | `admin` / `admin@careflow.com` | `Admin123!` | System-wide administrative controls |
+| **Hospital Manager** | `manager` / `manager@careflow.com` | `Manager123!` | Operations, staff requests, schedules |
+| **Doctor** | `doctor` / `doctor@careflow.com` | `Doctor123!` | Clinical records, appointments, schedules |
+| **Nurse** | `nurse` / `nurse@careflow.com` | `Nurse123!` | Patient care, appointments |
+| **Receptionist** | `receptionist` / `receptionist@careflow.com` | `Reception123!` | Patient intake, scheduling, check-in |
+| **Pharmacist** | `pharmacist` / `pharmacist@careflow.com` | `Pharmacy123!` | Pharmacy operations |
+| **Lab Technician** | `labtech` / `labtech@careflow.com` | `Lab123!` | Laboratory diagnostics |
+| **Patient** | `patient` / `patient@careflow.com` | `Patient123!` | Patient portal, personal bookings |
 
 ---
 
-## 🚦 Getting Started
+## 🛠️ Quick Start
 
 ### Prerequisites
-- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
-- [Node.js (v20+)](https://nodejs.org/)
-- [SQL Server](https://www.microsoft.com/sql-server/) (or LocalDB)
+- **Java**: JDK 21+ (Compatible with Oracle JDK / OpenJDK 21, 25, 27)
+- **Node.js**: v20+ or v22+
+- **npm**: v10+
 
-### 1. Database & Backend Setup
-```powershell
-# Restore dependencies and build solution
-dotnet build HospitalManagement.slnx
-
-# Apply EF Core migrations to SQL Server (Database: HMS)
-dotnet ef database update --project HospitalManagement.Infrastructure --startup-project HospitalManagement.Api
-
-# Run ASP.NET Core API (Server starts at http://localhost:5000)
-dotnet run --project HospitalManagement.Api\HospitalManagement.Api.csproj
+### 1. Clone & Set Up
+```bash
+git clone https://github.com/KISHORETAMIL03579/HospitalManagementSystem_Java_React.git
+cd HospitalManagementSystem_Java_React
 ```
 
-### 2. Frontend Setup
-```powershell
+### 2. Run the Spring Boot Backend
+```bash
+# Using the Maven wrapper (starts on http://localhost:5000)
+cd backend
+./mvnw spring-boot:run
+# On Windows PowerShell:
+.\mvnw.cmd spring-boot:run
+```
+- **API Base**: `http://localhost:5000/api/v1`
+- **Swagger UI**: `http://localhost:5000/swagger`
+- **H2 Console**: `http://localhost:5000/h2-console` (JDBC URL: `jdbc:h2:mem:careflowdb`, user: `sa`, password: blank)
+
+### 3. Run the React Frontend
+```bash
+# In a separate terminal
 cd frontend
-
-# Install npm dependencies
 npm install
-
-# Start development server (UI starts at http://localhost:5173)
 npm run dev
 ```
+- **Frontend App**: `http://localhost:5173`
 
 ---
 
-## 🧪 Running Unit Tests
+## 🧪 Testing
 
-```powershell
-dotnet test HospitalManagement.slnx
+### Backend (JUnit 5 + Mockito)
+```bash
+cd backend
+./mvnw test
+# Windows PowerShell:
+.\mvnw.cmd test
+```
+
+### Frontend (Vitest)
+```bash
+cd frontend
+npm test
 ```
 
 ---
 
-## 🗺️ Roadmap & Documentation
-
-For the complete 12-Phase Implementation Roadmap and detailed architectural flow, view [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md).
-
----
-
-## 🔐 Role-Based Navigation and Invitation Management
-
-### Overview
-
-The application uses role-based navigation to display only the pages and actions relevant to the authenticated user's assigned role. Unnecessary user-restriction pages and redundant navigation options have been removed.
-
-### Key Features
-
-* **Role-Based Navigation:** Display relevant pages and actions according to the user's role.
-* **Admin Invitations:** Administrators can invite users by email and assign the appropriate role.
-* **Invitation Management:** Administrators can view pending invitations and accept or reject them.
-* **Account Activation:** Users receive access after their invitation is accepted and their account is enabled.
-* **User Management:** Administrators can view accounts, edit permitted details, change roles, deactivate accounts, and reactivate accounts.
-* **Real-Time UI Updates:** Refresh navigation and account status after invitation or account changes without requiring a manual page reload.
-* **Access Control:** The backend must validate authentication, account status, and permissions for protected APIs and data. Frontend navigation visibility is not a replacement for backend authorization.
-
-### Invitation Workflow
-
-1. The administrator creates an invitation and assigns a role.
-2. The invitation remains pending until it is processed.
-3. The administrator accepts or rejects the invitation.
-4. Once accepted, the invited user can access the pages permitted by their assigned role.
-5. If the account is deactivated, access to protected resources is denied.
-
-### Security Requirements
-
-* Only authorized administrators can manage invitations and user accounts.
-* Validate invitation ownership, expiration, and status.
-* Prevent unauthorized role changes and privilege escalation.
-* Do not expose sensitive account information to unauthorized users.
-* Preserve audit history for important account and role changes.
-
-### Expected Result
-
-The application provides a simplified, role-aware user interface with invitation-based onboarding and centralized administrator account management. There is no separate user-restriction page or unnecessary pending-application approval workflow.
-
----
-
-## 📝 License
+## 📄 License
 This project is licensed under the MIT License.
-

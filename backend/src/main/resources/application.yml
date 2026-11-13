@@ -1,0 +1,52 @@
+server:
+  port: 5000
+
+spring:
+  application:
+    name: careflow-hospital-management
+  datasource:
+    url: jdbc:h2:mem:careflowdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MSSQLServer
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  mail:
+    host: localhost
+    port: 1025
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger
+    operationsSorter: method
+
+app:
+  jwt:
+    secret: CareFlow_Super_Secret_JWT_Signing_Key_2026_Minimum_32_Bytes!
+    expiration-minutes: 120
+    issuer: CareFlowHMS
+    audience: CareFlowHMSClient
+  smtp:
+    frontend-base-url: http://localhost:5173
+    support-url: http://localhost:5173/contact
+    sender-email: noreply@careflow.com
+    sender-name: CareFlow HMS Security
+    enable-real-delivery: false
