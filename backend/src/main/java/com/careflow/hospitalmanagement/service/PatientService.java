@@ -10,7 +10,6 @@ import com.careflow.hospitalmanagement.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,7 +79,7 @@ public class PatientService {
         int pageNumber = Math.max(1, page) - 1; // Spring Page is 0-indexed
         int limit = Math.min(Math.max(1, pageSize), 100);
 
-        Pageable pageable = PageRequest.of(pageNumber, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(pageNumber, limit);
         String cleanSearch = (search != null && !search.isBlank()) ? search.trim() : null;
 
         Page<Patient> paged = patientRepository.findPatientsPaged(cleanSearch, pageable);

@@ -1,0 +1,76 @@
+{
+  "properties": [
+    {
+      "name": "app.jwt.secret",
+      "type": "java.lang.String",
+      "description": "JWT HMAC-SHA secret signing key."
+    },
+    {
+      "name": "app.jwt.expiration-minutes",
+      "type": "java.lang.Integer",
+      "description": "JWT access token lifetime in minutes."
+    },
+    {
+      "name": "app.jwt.issuer",
+      "type": "java.lang.String",
+      "description": "JWT token issuer claim."
+    },
+    {
+      "name": "app.jwt.audience",
+      "type": "java.lang.String",
+      "description": "JWT token audience claim."
+    },
+    {
+      "name": "app.smtp.frontend-base-url",
+      "type": "java.lang.String",
+      "description": "Hospital portal frontend base URL for email links."
+    },
+    {
+      "name": "app.smtp.support-url",
+      "type": "java.lang.String",
+      "description": "Helpdesk / IT support desk URL."
+    },
+    {
+      "name": "app.smtp.sender-email",
+      "type": "java.lang.String",
+      "description": "Default from email address for notifications."
+    },
+    {
+      "name": "app.smtp.sender-name",
+      "type": "java.lang.String",
+      "description": "Display name of sender for hospital emails."
+    },
+    {
+      "name": "app.smtp.enable-real-delivery",
+      "type": "java.lang.Boolean",
+      "description": "Whether to deliver emails via SMTP or log to DB."
+    },
+    {
+      "name": "spring.h2.console.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the H2 console web interface."
+    },
+    {
+      "name": "spring.h2.console.path",
+      "type": "java.lang.String",
+      "description": "Context path for H2 console."
+    }
+  ],
+  "groups": [
+    {
+      "name": "app.jwt",
+      "type": "com.careflow.hospitalmanagement.config.AppProperties$Jwt",
+      "sourceType": "com.careflow.hospitalmanagement.config.AppProperties"
+    },
+    {
+      "name": "app.smtp",
+      "type": "com.careflow.hospitalmanagement.config.AppProperties$Smtp",
+      "sourceType": "com.careflow.hospitalmanagement.config.AppProperties"
+    },
+    {
+      "name": "spring.h2.console",
+      "type": "org.springframework.boot.autoconfigure.h2.H2ConsoleProperties",
+      "sourceType": "org.springframework.boot.autoconfigure.h2.H2ConsoleProperties"
+    }
+  ]
+}
