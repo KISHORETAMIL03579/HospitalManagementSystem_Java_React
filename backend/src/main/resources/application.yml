@@ -34,6 +34,9 @@ springdoc:
     path: /v3/api-docs
   swagger-ui:
     path: /swagger
+    doc-expansion: list
+    display-request-duration: true
+    default-models-expand-depth: -1
 
 app:
   jwt:
