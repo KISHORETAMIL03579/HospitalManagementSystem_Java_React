@@ -63,3 +63,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 }
+
+
+//    "In Spring Boot, we can create custom middleware by implementing the `Filter` interface or extending `OncePerRequestFilter`. We override the `doFilter()` or `doFilterInternal()` method to intercept incoming HTTP requests, perform operations such as authentication, authorization, logging, or validation, and then use `filterChain.doFilter(request, response)` to pass the request to the next component in the filter chain."
+
+//   If the interviewer asks about JWT authentication:
+
+//    "We extend `OncePerRequestFilter`, extract the JWT token from the Authorization header, validate the token, identify the user, set the authentication details in `SecurityContextHolder`, and allow the request to proceed to the Controller."
+
+//   Remember this key line:
+
+//    `OncePerRequestFilter` + `doFilterInternal()` + `FilterChain` = Custom middleware in Spring Boot.

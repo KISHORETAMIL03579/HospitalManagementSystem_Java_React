@@ -2,7 +2,7 @@
 
 > A modern, enterprise-grade **Hospital Management System** built with **Java Spring Boot 3**, **Spring Security**, **Spring Data JPA**, **H2 / SQL Server**, and **React 19 + TypeScript (Vite)** adhering to **Clean Architecture** and **Feature-Sliced Frontend Design**.
 
-[![Java Spring Boot 3 Build & Test](https://img.shields.io/badge/Java-21%20%7C%20Spring%20Boot%203.3-green?logo=springboot)](https://github.com/KISHORETAMIL03579/HospitalManagementSystem_Java_React)
+[![Java Spring Boot 4 Build & Test](https://img.shields.io/badge/Java-25%20(LTS)%20%7C%20Spring%20Boot%204.1-green?logo=springboot)](https://github.com/KISHORETAMIL03579/HospitalManagementSystem_Java_React)
 ![React 19](https://img.shields.io/badge/React-19.0-blue?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?logo=typescript)
 ![Database](https://img.shields.io/badge/Database-H2%20%7C%20SQL%20Server-red)
@@ -80,7 +80,7 @@
 ## 🛠️ Quick Start
 
 ### Prerequisites
-- **Java**: JDK 21+ (Compatible with Oracle JDK / OpenJDK 21, 25, 27)
+- **Java**: JDK 25 LTS (Latest LTS; fully compatible with Oracle JDK / OpenJDK 25 and 27)
 - **Node.js**: v20+ or v22+
 - **npm**: v10+
 
