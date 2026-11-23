@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: careflow-hospital-management
+  profiles:
+    active: postgres
   datasource:
     url: jdbc:h2:mem:careflowdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MSSQLServer
     driverClassName: org.h2.Driver
