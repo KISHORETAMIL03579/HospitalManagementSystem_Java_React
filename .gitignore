@@ -43,6 +43,7 @@ target/
 *.jar
 *.war
 *.ear
+*.exe
 !**/src/main/**
 !**/src/test/**
 
