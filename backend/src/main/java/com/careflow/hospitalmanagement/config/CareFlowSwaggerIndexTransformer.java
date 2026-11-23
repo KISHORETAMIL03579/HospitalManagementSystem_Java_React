@@ -56,17 +56,28 @@ public class CareFlowSwaggerIndexTransformer extends SwaggerIndexPageTransformer
                 html = html.replace("</body>", customBody + "\n</body>");
             }
             byte[] bytes = html.getBytes(StandardCharsets.UTF_8);
-            return new ByteArrayResource(bytes) {
-                @Override
-                public String getFilename() {
-                    return transformed.getFilename();
-                }
+            return new TransformedHtmlResource(bytes, transformed.getFilename(), transformed.lastModified());
+        }
+    }
 
-                @Override
-                public long lastModified() throws IOException {
-                    return transformed.lastModified();
-                }
-            };
+    private static class TransformedHtmlResource extends ByteArrayResource {
+        private final String filename;
+        private final long lastModified;
+
+        public TransformedHtmlResource(byte[] byteArray, String filename, long lastModified) {
+            super(byteArray);
+            this.filename = filename;
+            this.lastModified = lastModified;
+        }
+
+        @Override
+        public String getFilename() {
+            return this.filename;
+        }
+
+        @Override
+        public long lastModified() {
+            return this.lastModified;
         }
     }
 }
