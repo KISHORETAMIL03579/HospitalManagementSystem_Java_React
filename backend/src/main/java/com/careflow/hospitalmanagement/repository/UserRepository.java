@@ -28,7 +28,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     long countActiveAdmins();
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.role WHERE " +
-           "(:search IS NULL OR LOWER(u.fullName) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(u.email) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(u.username) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(u.employeeId) LIKE LOWER(CONCAT('%', :search, '%'))) AND " +
+           "(CAST(:search AS string) IS NULL OR LOWER(u.fullName) LIKE LOWER(CONCAT('%', CAST(:search AS string), '%')) OR LOWER(u.email) LIKE LOWER(CONCAT('%', CAST(:search AS string), '%')) OR LOWER(u.username) LIKE LOWER(CONCAT('%', CAST(:search AS string), '%')) OR LOWER(u.employeeId) LIKE LOWER(CONCAT('%', CAST(:search AS string), '%'))) AND " +
            "(:roleId IS NULL OR u.roleId = :roleId) AND " +
            "(:isActive IS NULL OR u.isActive = :isActive) ORDER BY u.userId ASC")
     List<User> searchUsers(@Param("search") String search, @Param("roleId") Integer roleId, @Param("isActive") Boolean isActive);

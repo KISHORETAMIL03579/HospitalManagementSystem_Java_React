@@ -82,7 +82,9 @@ public class PatientService {
         Pageable pageable = PageRequest.of(pageNumber, limit);
         String cleanSearch = (search != null && !search.isBlank()) ? search.trim() : null;
 
-        Page<Patient> paged = patientRepository.findPatientsPaged(cleanSearch, pageable);
+        Page<Patient> paged = (cleanSearch != null)
+                ? patientRepository.findPatientsPaged(cleanSearch, pageable)
+                : patientRepository.findByIsActiveTrue(pageable);
         List<PatientDto> items = paged.getContent().stream().map(this::mapToDto).toList();
 
         return new PatientListResponse(items, (int) paged.getTotalElements(), page, limit);
