@@ -72,6 +72,7 @@ body {
   text-decoration: none;
   color: #fff;
   flex-shrink: 0;
+  position: relative;
 }
 
 .swagger-ui .topbar .topbar-wrapper a.link svg,
@@ -91,19 +92,23 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex: 0 1 420px;
+  flex: 0 1 400px;
+  position: relative;
+  z-index: 2;
 }
 
-.swagger-ui .topbar .download-url-wrapper input {
+.swagger-ui .topbar .download-url-wrapper input,
+.swagger-ui .topbar .download-url-wrapper input[type="text"] {
   width: 100%;
   border-radius: var(--cf-radius-sm);
   border: 1px solid #3b82f6;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   color: #fff;
   min-height: 36px;
   padding: 6px 12px;
   font-size: 13px;
   box-sizing: border-box;
+  outline: none;
 }
 
 .swagger-ui .topbar .download-url-wrapper input::placeholder {

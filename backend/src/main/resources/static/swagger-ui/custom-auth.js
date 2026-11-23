@@ -377,10 +377,9 @@
 
   function customizeBrand() {
     const link = $(".swagger-ui .topbar a.link");
-    if (!link || link.dataset.customized) return;
-    link.dataset.customized = "true";
+    if (!link || link.querySelector(".cf-brand-container")) return;
     link.innerHTML = `
-      <div style="display:inline-flex;align-items:center;gap:10px;">
+      <div class="cf-brand-container" style="display:inline-flex;align-items:center;gap:10px;">
         <div style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;background:#2563eb;color:#ffffff;border-radius:8px;font-weight:900;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.25);">
           +
         </div>
